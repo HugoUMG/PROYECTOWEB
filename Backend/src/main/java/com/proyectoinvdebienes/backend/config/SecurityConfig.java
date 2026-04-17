@@ -2,7 +2,7 @@ package com.proyectoinvdebienes.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,7 +28,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/disposals/**").hasAnyRole("ADMINISTRADOR", "INVENTARIO")
                         .requestMatchers("/api/employee/**").hasAnyRole("EMPLEADO", "ADMINISTRADOR")
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
+               .httpBasic(basic -> basic.authenticationEntryPoint(
+    (req, res, ex) -> res.sendError(401)));
         return http.build();
     }
 
